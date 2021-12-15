@@ -35,3 +35,8 @@ if [[ ! "$REPO_REMOTES" == *"$REMOTE"* ]]; then
   echo "ERROR: There is no remote called \"$REMOTE\""
   exit 1
 fi
+
+git switch "$1" &&
+git pull "$REMOTE" "$1" &&
+git switch "$2" &&
+git merge "$1"
