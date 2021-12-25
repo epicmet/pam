@@ -19,9 +19,9 @@
 
 # Installation script
 
-- check if there is no file called pam in /bin/bash of user then put it there.
+- Add support for windows folks.
 
-- Show pam -h (help of command) at the end of installation.
+- Make installation safer.
 
 # At the end
 
