@@ -70,10 +70,12 @@ if [ "$?" -ne "0" ]; then
   exit 1
 fi
 
-check_existance "$REPO_REMOTES" "$3"
-if [ "$?" -ne "0" ]; then
-  echo "ERROR: There is no remote called \"$REMOTE\""
-  exit 1
+if [[ ! -z "$3" ]]; then
+  check_existance "$REPO_REMOTES" "$3"
+  if [ "$?" -ne "0" ]; then
+    echo "ERROR: There is no remote called \"$REMOTE\""
+    exit 1
+  fi
 fi
 
 if [[ -z $3 ]]; then
