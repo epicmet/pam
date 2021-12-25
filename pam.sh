@@ -3,9 +3,26 @@
 # VARIABLES
 REPO_BRANCHES=$(git branch)
 REPO_BRANCHES=${REPO_BRANCHES/\*/}
+INITIAL_BRANCH=$(git branch --show-current)
 # REPO_BRANCHES=${REPO_BRANCHES//\\n/}
 REPO_REMOTES=$(git remote -v)
 REMOTE=${3:-origin}
+
+
+reset_to_normal() {
+  echo
+  echo "Reseting to inital state before running command ..."
+    git switch "$1"
+  if [[ "$(git branch --show-current)" -ne "$1" ]]; then
+    echo "I AM HERE"
+  fi
+}
+
+pull_and_merge() {  
+  trap "reset_to_normal $INITIAL_BRANCH" SIGINT
+  git switch "$1" && git pull "$REMOTE" "$1" && git switch "$2" && git merge "$1" && echo "Done :)"
+}
+
 
 if [ ! -d ".git" ]; then
   echo "ERROR: This is not a git repo. Please run the command in a git repository."
@@ -36,7 +53,11 @@ if [[ ! "$REPO_REMOTES" == *"$REMOTE"* ]]; then
   exit 1
 fi
 
-git switch "$1" &&
-git pull "$REMOTE" "$1" &&
-git switch "$2" &&
-git merge "$1"
+while true; do
+  read -p "Pull branch \"$1\" from the remote \"$REMOTE\" and merge it to branch \"$2\". right? [Yes, No] " USER_ANSWER
+  case $USER_ANSWER in
+      [Yy]* ) pull_and_merge $1 $2; exit 0;;
+      [Nn]* ) reset_to_normal $INITIAL_BRANCH; exit 1;;
+      * ) echo "Please answer yes or no.";;
+  esac
+done
