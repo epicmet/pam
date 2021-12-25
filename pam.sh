@@ -5,11 +5,6 @@ if [ ! -d ".git" ]; then
   exit 1
 fi
 
-if [[ -z $1 || -z $2 ]]; then
-  echo "ERROR: You have to provide two branches as parameters. See \"pam -h\""
-  exit 1
-fi
-
 # VARIABLES
 REPO_BRANCHES=$(git branch)
 REPO_BRANCHES=${REPO_BRANCHES/\*/}
@@ -26,11 +21,23 @@ reset_to_normal() {
 
 pull_and_merge() {  
   trap "reset_to_normal $INITIAL_BRANCH" SIGINT
-  git switch "$1" && git pull "$REMOTE" "$1" && git switch "$2" && git merge "$1" && echo "Done :)"
+  git switch "$1" &&
+  git pull "$REMOTE" "$1" &&
+  git switch "$2" &&
+  git merge "$1" &&
+  echo "Pulled branch \"$1\" from \"$REMOTE\" and merge it to branch \"$2\". Done :)"
 }
 
 show_help() {
+  echo "Pam is here to help you ;)"
+  echo
+  echo "Syntax:"
   echo "pam PULLING_BRANCH MERGING_BRANCH [ORIGIN]"
+  echo "pam -h"
+  echo
+  echo "options:"
+  echo "h     Print this Help."
+  echo
 }
 
 check_existance() {
@@ -45,6 +52,11 @@ check_existance() {
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   show_help
   exit 0
+fi
+
+if [[ -z $1 || -z $2 ]]; then
+  echo "ERROR: You have to provide two branches as parameters. See \"pam -h\""
+  exit 1
 fi
 
 check_existance "$REPO_BRANCHES" "$1"
@@ -70,7 +82,7 @@ if [[ -z $3 ]]; then
 fi
 
 while true; do
-  read -p "Pull branch \"$1\" from the remote \"$REMOTE\" and merge it to branch \"$2\". right? [Yes, No] " USER_ANSWER
+  read -p "Pull branch \"$1\" from \"$REMOTE\" and merge it to branch \"$2\". right? [Yes, No] " USER_ANSWER
   case $USER_ANSWER in
     [Yy]* ) pull_and_merge $1 $2; exit 0;;
     [Nn]* ) reset_to_normal $INITIAL_BRANCH; exit 1;;

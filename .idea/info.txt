@@ -1,8 +1,0 @@
-# PARAMS
-# $1 => pulling branch
-# $2 => mergin (into) branch
-# $3 => remote : default to 'origin'
-
-# FLAGS
-# -y => dont show the confirmation prompt
-# -h => show help message
