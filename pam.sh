@@ -5,6 +5,11 @@ if [ ! -d ".git" ]; then
   exit 1
 fi
 
+if [[ -z $1 || -z $2 ]]; then
+  echo "ERROR: You have to provide two branches as parameters. See \"pam -h\""
+  exit 1
+fi
+
 # VARIABLES
 REPO_BRANCHES=$(git branch)
 REPO_BRANCHES=${REPO_BRANCHES/\*/}
@@ -28,27 +33,34 @@ show_help() {
   echo "pam PULLING_BRANCH MERGING_BRANCH [ORIGIN]"
 }
 
+check_existance() {
+  for B in $1; do
+    if [[ "$B" == "$2" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 if [[ "$1" == "-h" || "$1" == "--help" ]]; then
   show_help
   exit 0
 fi
 
-if [[ -z $1 || -z $2 ]]; then
-  echo "ERROR: You have to provide two branches as parameters. See \"pam -h\""
-  exit 1
-fi
-
-if [[ ! "$REPO_BRANCHES" == *"$1"* ]]; then
+check_existance "$REPO_BRANCHES" "$1"
+if [ "$?" -ne "0" ]; then
   echo "ERROR: There is no branch called \"$1\""
   exit 1
 fi
 
-if [[ ! "$REPO_BRANCHES" == *"$2"* ]]; then
+check_existance "$REPO_BRANCHES" "$2"
+if [ "$?" -ne "0" ]; then
   echo "ERROR: There is no branch called \"$2\""
   exit 1
 fi
 
-if [[ ! "$REPO_REMOTES" == *"$REMOTE"* ]]; then
+check_existance "$REPO_REMOTES" "$3"
+if [ "$?" -ne "0" ]; then
   echo "ERROR: There is no remote called \"$REMOTE\""
   exit 1
 fi
