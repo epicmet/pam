@@ -8,8 +8,7 @@
 - when something gone wrong, turn everything bach to normal (for example switch back to the starting branch) - DONE
 - Write help command - DONE
 - Show a better complete message - DONE
-
-- Make installation
+- Make installation - DONE
 
 - Make autocomplete
 
@@ -17,16 +16,10 @@
 
 - Optimize a way to notify users if there is a update for pam.
 
+- Make a man entry.
+
 # Installation script
 
 - Add support for windows folks.
 
 - Make installation safer.
-
-# At the end
-
-- Make a README
-
-- Make a man entry.
-
-- Change repo to be public.
