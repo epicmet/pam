@@ -9,7 +9,6 @@ fi
 REPO_BRANCHES=$(git branch)
 REPO_BRANCHES=${REPO_BRANCHES/\*/}
 INITIAL_BRANCH=$(git branch --show-current)
-# REPO_BRANCHES=${REPO_BRANCHES//\\n/}
 REPO_REMOTES=$(git remote -v)
 REMOTE=${3:-origin}
 

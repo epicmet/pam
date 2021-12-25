@@ -25,8 +25,6 @@
 
 # At the end
 
-- Clean up comments.
-
 - Make a README
 
 - Make a man entry.
